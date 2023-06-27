@@ -7,6 +7,7 @@ use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\UserController;
 use App\Models\Customers;
 use App\Http\Controllers\CustomersController;
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -187,7 +188,25 @@ Route::prefix('')->group(function() {
     Route::get('/customers-create', [CustomersController::class, 'index'])->name('customers-create');
     Route::post('/customers', [CustomersController::class, 'store'])->name('customers');
     Route::get('/customers/view', [CustomersController::class, 'view'])->name('customers-view');
+    Route::get('/customers/trash', [CustomersController::class, 'trash'])->name('customers-trash');
     Route::get('/customers/delete/{id}', [CustomersController::class, 'delete'])->name('customers-delete');
+    Route::get('/customers/forcedelete/{id}', [CustomersController::class, 'forceDelete'])->name('customers-forcedelete');
     Route::get('/customers/edit/{id}', [CustomersController::class, 'edit'])->name('customers-edit');
+    Route::get('/customers/restore/{id}', [CustomersController::class, 'restore'])->name('customers-restore');
     Route::post('/customers/update/{id}', [CustomersController::class, 'update'])->name('customers-update');
+});
+
+Route::get('/get-session', function(Request $request) {
+    return precode($request->session()->all());
+});
+
+Route::get('/set-session', function(Request $request) {
+    $request->session()->put('user_name', 'Himanshu Chaudhary');
+    $request->session()->flash('status', 'This is flash session');
+    return redirect('get-session');
+});
+
+Route::get('/destroy-session', function() {
+    session()->forget('user_name');
+    return redirect('get-session');
 });

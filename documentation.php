@@ -61,3 +61,56 @@
  * "php artisan make:model <Modelname> --migration" command is used to create a model along with migration table for the given model name
  *
  */
+
+/**
+ * Customer helper helps to use method across the application.
+ * First we create a helper file in app folder and then we configure it into composer.json 'autoload' object
+ * "files": [
+    "app/Helpers/helper.php"
+    ],
+ * Once added the helper file in autoload then run "composer dump-autoload" command to update the application seetings then we can use that method in any file
+ *
+ *==== Accessor and Mutator ====*
+ * Mutator is used to transform an Eloquoent attribute value when it is set
+ * we use mutator like set{AttributeName}Attribute($value) method and in this function we can modify the model eloquent value
+ *
+ * Accessor is used to transform an Eloquent attribute when it is accessed
+ * we use accessor like get{AttributeName}Attribute($value) method and in this function we can modify the model eloquent value
+ *
+ * Accessor and Mutator mostly use for password encryption
+ *
+ *====== Session ======
+ ** Retrieving data in session:
+ * $request->session()->get('key');
+ * session('key');
+ *
+ ** Retrieving All session data:
+ * $request->session()->all();
+ * session()->all();
+ *
+ ** Determining IF and Item Exists in session
+ * $request->session()-has('key');
+ * session()->key('key');
+ *
+ ** Storing data:
+ * $request->session()->put('key', 'value');
+ * session(['key' => 'value']);
+ *
+ * Flash data:
+ * $request->session()->flast('status', 'Taks was successfull');
+ * session()-all();
+ *
+ * Deleting data:
+ * $request->session()->forget('key');
+ * $request->session()->forget(['key1', 'key2']);
+ * $request->session()->flush();
+ *
+ *
+ *========= Softdelete in Laravel ========*
+ * Softdelete in laravel used to move the data into trash instead of hard delete the data from database. We can restore and hard delete the soft deletes data
+ * To work with softdelete feature we need to use namespace "Illuminate\Database\Eloquent\SoftDeletes" in our model class then use "use SoftDeletes" in model class
+ * Softdelete add a new column 'deleted_at' to the databse table.
+ * To add softdelete column in database table create new migration table 'add_deleted_at_to_customers_table' using php artisan make:migration command
+ * Now add the method for deleted_at column in the new migration file '$table->softDeletes()" in up method and "$table->dropSoftDeeletes()" in down method and then run php artisan migrate
+ * check customerscontroller for softdelete feature with their calling methods
+ */

@@ -36,9 +36,25 @@ class CustomersController extends Controller
 
     public function view() {
         $customers = Customers::all();
+//        precode($customers);
+//        die;
         $data = compact('customers');
 
         return view('customer-view')->with($data);
+    }
+
+    public function trash() {
+        $customers = Customers::onlyTrashed()->get();
+        $data = compact('customers');
+        return view('customer-trash')->with($data);
+    }
+
+    public function forceDelete($id) {
+        $customer = Customers::withTrashed()->find($id);
+        if(!is_null($customer)) {
+            $customer->forceDelete();
+        }
+        return redirect('customers/view');
     }
 
     public function delete($id) {
@@ -46,6 +62,14 @@ class CustomersController extends Controller
         Log::info('customer id' . $customer);
         if(!is_null($customer)) {
             $customer->delete();
+        }
+        return redirect('customers/view');
+    }
+
+    public function restore($id) {
+        $customer = Customers::withTrashed()->find($id);
+        if(!is_null($customer)) {
+            $customer->restore();
         }
         return redirect('customers/view');
     }
